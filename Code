@@ -1,0 +1,69 @@
+var statesList = getColumn("COVID-19 Cases per US State", "State");
+var casesList = getColumn("COVID-19 Cases per US State", "Total Confirmed Cases");
+var deathsList = getColumn("COVID-19 Cases per US State", "Total Deaths");
+var dateList = getColumn("COVID-19 Cases per US State", "Date");
+
+var filteredStatesList = [];
+var filteredCasesList = [];
+var filteredDeathsList = [];
+var filteredDateList = [];
+
+filter();
+//sets different textboxes different values
+setProperty("date", "text", "Cases as of " + filteredDateList[0]);
+setProperty("date2", "text", "Cases as of " + filteredDateList[1]);
+
+//sets dropdown values
+setProperty("casesDropdown", "options", filteredStatesList);
+setProperty("deathDropdown", "options", filteredStatesList);
+
+//Buttons to change screens
+onEvent("buttonToDeath", "click", function( ) {
+  setScreen("DeathsScreen");
+});
+onEvent("buttonToCases", "click", function( ) {
+  setScreen("CasesScreen");
+});
+onEvent("buttonToDeath2", "click", function( ) {
+  setScreen("DeathsScreen");
+});
+onEvent("buttonToCases2", "click", function( ) {
+  setScreen("CasesScreen");
+});
+onEvent("buttonToHome", "click", function( ) {
+  setScreen("Home");
+});
+onEvent("buttonToHome2", "click", function( ) {
+  setScreen("Home");
+});
+
+//Changes provides information on selected item in dropdown for cases and deaths
+onEvent("casesDropdown", "change", function() {
+  filter();
+  var COutput = filteredCasesList[randomNumber(0, filteredCasesList.length-1)];
+  var dropdownValue = getProperty("casesDropdown", "text");
+  setProperty("casesOutput", "text", COutput + " cases in " + dropdownValue);
+});
+onEvent("deathDropdown", "change", function(){
+  filter();
+  var DOutput = filteredCasesList[randomNumber(0, filteredDeathsList.length-1)];
+  var dropdownValue = getProperty("deathDropdown", "text");
+  setProperty("deathOutput", "text", DOutput + " cases in " + dropdownValue);
+});
+
+//funtion to filter the lists
+function filter(){
+  filteredStatesList = [];
+  filteredCasesList = [];
+  filteredDeathsList = [];
+  filteredDateList = [];
+  
+  for(var i = 0; i < dateList.length-1; i++){
+    if((dateList[i] == 'Fri 11/20')){
+      appendItem(filteredStatesList, statesList[i]);
+      appendItem(filteredCasesList, casesList[i]);
+      appendItem(filteredDeathsList, deathsList[i]);
+      appendItem(filteredDateList, dateList[i]);
+    }
+  }
+}
